@@ -1,5 +1,6 @@
 package com.diegohipolito05.projetomongodb.resources;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,15 @@ public class PostResource {
 		return ResponseEntity.ok(list);
 	}
 	
+	@GetMapping(value = "/fullsearch")
+	public ResponseEntity<List<Post>> findByTextBetwenDates(
+			@RequestParam(value = "title", defaultValue = "") String title,
+			@RequestParam(value = "minDate", defaultValue = "") String textMinDate,
+			@RequestParam(value = "maxDate", defaultValue = "") String textMaxDate){
+		String decodeTitle = URL.decodParam(title);
+		Date minDate = URL.decodDate(textMinDate, new Date(0L));
+		Date maxDate = URL.decodDate(textMaxDate, new Date());
+		List<Post> list = service.findByTextBetwenDates(decodeTitle, minDate, maxDate);
+		return ResponseEntity.ok(list);
+	}
 }
